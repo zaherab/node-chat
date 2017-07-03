@@ -4,15 +4,8 @@ html
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
     script(src='/socket.io/socket.io.js')
-    script.
-        var socket = io();
-        console.log('running.....');
-        socket.on('connect', ()=>{
-          console.log('connected to the server...');
-        });
+    script(src='/javascripts/index.js')
 
-        socket.on('disconnect',()=>{
-          console.log('disconnected from server...');
-        })
+
   body
     block content

@@ -10,7 +10,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
-app.socketIO= socketIO;
+app.socketIO = socketIO;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -28,14 +28,14 @@ app.use('/', index);
 app.use('/users', users);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -45,11 +45,29 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-socketIO.on('connection', function(socket){
-    //console.log('\nA client connection occurred!\n');
-    socket.on('disconnect',()=>{
-      console.log('User is disconnected');
-    })
+socketIO.on('connection', function (socket) {
+  //console.log('\nA client connection occurred!\n');
+
+  socket.on('createMessage', (message) => {
+    console.log(message);
+  });
+
+  socket.emit('newMessage', {
+    from: 'Zaher',
+    text: 'fuck you debby',
+    createdAt: new Date()
+  });
+
+
+
+
+
+
+  socket.on('disconnect', () => {
+    console.log('User is disconnected');
+  });
+
+
 });
 
 

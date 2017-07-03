@@ -50,13 +50,14 @@ socketIO.on('connection', function (socket) {
 
   socket.on('createMessage', (message) => {
     console.log(message);
+    socketIO.emit('newMessage',{
+      from: message.from,
+      text:message.text,
+      createdAt: new Date().getTime()
+    })
   });
 
-  socket.emit('newMessage', {
-    from: 'Zaher',
-    text: 'fuck you debby',
-    createdAt: new Date()
-  });
+
 
 
 

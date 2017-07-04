@@ -47,14 +47,26 @@ app.use(function (err, req, res, next) {
 
 socketIO.on('connection', function (socket) {
   //console.log('\nA client connection occurred!\n');
-
+socket.emit('newMessage', {
+      from: 'Admin',
+      text: 'Welcome to the chat app',
+      createdAt: new Date().getTime()
+    });
+    
+     socket.broadcast.emit('newMessage', {
+      from: 'Admin',
+      text: 'New User Joined',
+      createdAt: new Date().getTime()
+    });
+    
   socket.on('createMessage', (message) => {
     console.log(message);
-    socketIO.emit('newMessage',{
+    //socket broadcast only to others
+    socket.broadcast.emit('newMessage', {
       from: message.from,
-      text:message.text,
+      text: message.text,
       createdAt: new Date().getTime()
-    })
+    });
   });
 
 

@@ -9,6 +9,8 @@ var socketIO = require('socket.io')();
 var index = require('./routes/index');
 var users = require('./routes/users');
 
+var { generateMessage } = require('./utils/message');
+
 var app = express();
 app.socketIO = socketIO;
 
@@ -47,26 +49,14 @@ app.use(function (err, req, res, next) {
 
 socketIO.on('connection', function (socket) {
   //console.log('\nA client connection occurred!\n');
-socket.emit('newMessage', {
-      from: 'Admin',
-      text: 'Welcome to the chat app',
-      createdAt: new Date().getTime()
-    });
-    
-     socket.broadcast.emit('newMessage', {
-      from: 'Admin',
-      text: 'New User Joined',
-      createdAt: new Date().getTime()
-    });
-    
+  socket.emit('newMessage', generateMessage('Admin', 'Welcome to teh chat app'));
+
+  socket.broadcast.emit('newMessage', generateMessage('Admin', 'new User Join'));
+
   socket.on('createMessage', (message) => {
     console.log(message);
     //socket broadcast only to others
-    socket.broadcast.emit('newMessage', {
-      from: message.from,
-      text: message.text,
-      createdAt: new Date().getTime()
-    });
+    socket.broadcast.emit('newMessage', generateMessage(message.from, message.text));
   });
 
 

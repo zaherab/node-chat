@@ -49,14 +49,15 @@ app.use(function (err, req, res, next) {
 
 socketIO.on('connection', function (socket) {
   //console.log('\nA client connection occurred!\n');
-  socket.emit('newMessage', generateMessage('Admin', 'Welcome to teh chat app'));
+  socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
 
   socket.broadcast.emit('newMessage', generateMessage('Admin', 'new User Join'));
 
-  socket.on('createMessage', (message) => {
+  socket.on('createMessage', (message, callback) => {
     console.log(message);
     //socket broadcast only to others
-    socket.broadcast.emit('newMessage', generateMessage(message.from, message.text));
+    socketIO.emit('newMessage', generateMessage(message.from, message.text));
+    callback('this is from the server');
   });
 
 

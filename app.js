@@ -9,7 +9,7 @@ var socketIO = require('socket.io')();
 var index = require('./routes/index');
 var users = require('./routes/users');
 
-var { generateMessage } = require('./utils/message');
+var { generateMessage, generateLocationMessage } = require('./utils/message');
 
 var app = express();
 app.socketIO = socketIO;
@@ -59,18 +59,13 @@ socketIO.on('connection', function (socket) {
     callback('this is from the server');
   });
 
-
-
-
-
-
-
+  socket.on('createLocationMessage', (coords) => {
+    socketIO.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude))
+  });
 
   socket.on('disconnect', () => {
     console.log('User is disconnected');
   });
-
-
 });
 
 

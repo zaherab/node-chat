@@ -56,7 +56,7 @@ socketIO.on('connection', function (socket) {
   socket.on('createMessage', (message, callback) => {
     //socket broadcast only to others
     socketIO.emit('newMessage', generateMessage(message.from, message.text));
-    callback('this is from the server');
+    callback();
   });
 
   socket.on('createLocationMessage', (coords) => {

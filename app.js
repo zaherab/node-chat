@@ -54,7 +54,6 @@ socketIO.on('connection', function (socket) {
   socket.broadcast.emit('newMessage', generateMessage('Admin', 'new User Join'));
 
   socket.on('createMessage', (message, callback) => {
-    console.log(message);
     //socket broadcast only to others
     socketIO.emit('newMessage', generateMessage(message.from, message.text));
     callback('this is from the server');

@@ -10,26 +10,39 @@ $(document).ready(function () {
 
     socket.on('newMessage', function (message) {
         var formattedTime = moment(message.createdAt).format('h:mm a');
-        var li = $('<li></li>')
-        li.text(`${message.from} ${formattedTime} : ${message.text}`);
+        var template = $('#message-template').html();
+        var html = Mustache.render(template, {
+            text: message.text,
+            from: message.from,
+            createdAt: formattedTime
+        });
 
-        $('#messages').append(li);
+        $('#messages').append(html);
+        // var formattedTime = moment(message.createdAt).format('h:mm a');
+        // var li = $('<li></li>')
+        // li.text(`${message.from} ${formattedTime} : ${message.text}`);
+
+        // $('#messages').append(li);
     });
     socket.on('newLocationMessage', function (message) {
         var formattedLocationTime = moment(message.createdAt).format('h:mm a');
-        var li = $('<li></li>');
-        var a = $(' <a target="_blank">My current location</a>');
+        var template = $('#location-message-template').html();
+        var html = Mustache.render(template, {
+            url: message.url,
+            from: message.from,
+            createdAt: formattedLocationTime
+        });
 
-        li.text(`${message.from} ${formattedLocationTime}: `);
-        a.attr('href', message.url);
-        li.append(a);
-        $('#messages').append(li);
+        $('#messages').append(html);
+        // var formattedLocationTime = moment(message.createdAt).format('h:mm a');
+        // var li = $('<li></li>');
+        // var a = $(' <a target="_blank">My current location</a>');
+
+        // li.text(`${message.from} ${formattedLocationTime}: `);
+        // a.attr('href', message.url);
+        // li.append(a);
+        // $('#messages').append(li);
     });
-    // socket.emit('createMessage', {
-    //     from: 'Zaher',
-    //     text: "Hi everybody!!!"
-    // }, function (data) {
-    // });
 
     $('#message-form').on('submit', function (e) {
         e.preventDefault();

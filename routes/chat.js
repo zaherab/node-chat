@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
+/* GET chat page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Join | Chat App' });
+  res.render('chat', { title: 'Chat Room | Chat App' });
 });
 
 module.exports = router;

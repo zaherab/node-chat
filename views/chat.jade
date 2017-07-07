@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  div.chat__sidebar
+    h3 People
+    div#users
+  div.chat__main
+    ol.chat__messages#messages
+    div.chat__footer
+      form(id='message-form')
+        input#name.form-control(type='text', placeholder='what do you think?' name='message', autofocus, autocomplete="off")
+        button.btn.btn-primary() Send
+      button.btn.btn-success(id="send-location") Send Location

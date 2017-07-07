@@ -1,13 +1,15 @@
-extends layout
+extends layout.join
 
 block content
-  div.chat__sidebar
-    h3 People
-    div#users
-  div.chat__main
-    ol.chat__messages#messages
-    div.chat__footer
-      form(id='message-form')
-        input#name.form-control(type='text', placeholder='what do you think?' name='message', autofocus, autocomplete="off")
-        button.btn.btn-primary() Send
-      button.btn.btn-success(id="send-location") Send Location
+  div.centered-form__form
+    form(action='/chat', method='')
+      div.form-field
+        h3 Join a Chat 
+      div.form-field
+        label Display name
+        input(type='text', placeholder='Your name' name='name', autofocus, autocomplete="off")
+      div.form-field
+        label Room Name
+        input(type='text', placeholder='what do you think?' name='room')
+      div.form-field
+         button Join

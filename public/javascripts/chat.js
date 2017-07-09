@@ -1,3 +1,5 @@
+
+$(function () {
 var socket = io();
 
 function scrollToBottom() {
@@ -93,4 +95,6 @@ locationBtn.on('click', function () {
         alert('Unable to fetch location');
         locationBtn.removeAttr('disabled').text('Send Location');
     })
+});
+
 });

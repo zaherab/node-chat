@@ -41,7 +41,4 @@ https://stormy-wave-81843.herokuapp.com/
 
 * [Express](http://expressjs.com/) - The web framework used
 
-## License
-
-This project is licensed under the MIT License
 

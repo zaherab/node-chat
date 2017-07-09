@@ -31,6 +31,11 @@ to run the test, run in your teminal :
 ```
 npm test
 ```
+## Deployment
+
+This project has been deployed on heroku :
+
+https://stormy-wave-81843.herokuapp.com/
 
 ## Built With
 

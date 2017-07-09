@@ -30,11 +30,11 @@ socket.on('disconnect', function () {
     console.log('user disconnected from server...');
 });
 
-socket.on('updateUserList',function(users){
+socket.on('updateUserList', function (users) {
     console.log('users List', users);
     var ol = $('<ol></ol>');
 
-    users.forEach(function(user){
+    users.forEach(function (user) {
         ol.append($('<li></li>').text(user))
     });
     $('#users').html(ol);
@@ -66,10 +66,10 @@ socket.on('newLocationMessage', function (message) {
     scrollToBottom();
 });
 
-$('#message-form').on('submit', function (e) {
+$('#message-form').on('submit',function (e) {
     e.preventDefault();
+
     socket.emit('createMessage', {
-        from: 'User',
         text: $('[name=message]').val()
     }, function () {
         $('[name=message]').val('')

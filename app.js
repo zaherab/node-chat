@@ -66,8 +66,7 @@ io.on('connection', function (socket) {
     users.removeUser(socket.id);
     users.addUser(socket.id, params.name, params.room);
 
-    io.to(params.room).emit('updateUserList',users.getUserList(params.room));
-
+    io.to(params.room).emit('updateUserList', users.getUserList(params.room));
 
     socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
     socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.name} joined!`));
@@ -76,19 +75,24 @@ io.on('connection', function (socket) {
   });
 
   socket.on('createMessage', (message, callback) => {
-    //socket broadcast only to others
-    io.emit('newMessage', generateMessage(message.from, message.text));
+    var user = users.getUser(socket.id);
+    if (user && isRealString(message.text)) {
+      io.to(user.room).emit('newMessage', generateMessage(user.name, message.text));
+    }
     callback();
   });
 
   socket.on('createLocationMessage', (coords) => {
-    io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude))
+    var user = users.getUser(socket.id);
+    if (user) {
+      io.to(user.room).emit('newLocationMessage', generateLocationMessage(user.name, coords.latitude, coords.longitude));
+    }
   });
 
   socket.on('disconnect', () => {
     console.log('User is disconnected');
     var user = users.removeUser(socket.id);
-    if(user){
+    if (user) {
       io.to(user.room).emit('updateUserList', users.getUserList(user.room));
       io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left`));
     }

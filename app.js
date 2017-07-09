@@ -4,16 +4,20 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var socketIO = require('socket.io')();
+var io = require('socket.io')();
 
 var index = require('./routes/index');
 var chat = require('./routes/chat');
-var users = require('./routes/users');
+
 
 var { generateMessage, generateLocationMessage } = require('./utils/message');
+var { isRealString } = require('./utils/validation');
+var { Users } = require('./utils/users');
+
+var users = new Users();
 
 var app = express();
-app.socketIO = socketIO;
+app.io = io;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -28,7 +32,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-app.use('/users', users);
 app.use('/chat', chat);
 
 // catch 404 and forward to error handler
@@ -49,24 +52,46 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
-socketIO.on('connection', function (socket) {
-  //console.log('\nA client connection occurred!\n');
-  socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
+io.on('connection', function (socket) {
 
-  socket.broadcast.emit('newMessage', generateMessage('Admin', 'new User Join'));
+  console.log('New user connected');
+
+  socket.on('join', (params, callback) => {
+
+    if (!isRealString(params.name || !isRealString(params.room))) {
+      return callback('Name and room name are required');
+    }
+    socket.join(params.room);
+
+    users.removeUser(socket.id);
+    users.addUser(socket.id, params.name, params.room);
+
+    io.to(params.room).emit('updateUserList',users.getUserList(params.room));
+
+
+    socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
+    socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.name} joined!`));
+
+    callback();
+  });
 
   socket.on('createMessage', (message, callback) => {
     //socket broadcast only to others
-    socketIO.emit('newMessage', generateMessage(message.from, message.text));
+    io.emit('newMessage', generateMessage(message.from, message.text));
     callback();
   });
 
   socket.on('createLocationMessage', (coords) => {
-    socketIO.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude))
+    io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude))
   });
 
   socket.on('disconnect', () => {
     console.log('User is disconnected');
+    var user = users.removeUser(socket.id);
+    if(user){
+      io.to(user.room).emit('updateUserList', users.getUserList(user.room));
+      io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left`));
+    }
   });
 });
 

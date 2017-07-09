@@ -24,8 +24,8 @@ var server = http.createServer(app);
 /**
  * Create a Socket.IO 
  */
-var socketIO = app.socketIO;
-socketIO.listen(server);
+var io = app.io;
+io.listen(server);
 
 /**
  * Listen on provided port, on all network interfaces.

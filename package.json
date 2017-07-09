@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "export NODE_ENV=test || SET NODE_ENV=test && mocha test/*.test.js",
+    "test": "mocha test/*.test.js",
     "watch": "nodemon --exec 'npm test'"
   },
   "engines": {

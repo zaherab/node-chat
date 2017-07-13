@@ -21,7 +21,7 @@ describe('generateLocationMessage', () => {
         var lat= 25.55555;
         var long=75.99999;
         var url = 'https://www.google.com/maps?q=25.55555,75.99999';
-        var imgUrl = 'https://maps.googleapis.com/maps/api/staticmap?center=25.55555,75.99999&size=250x150&zoom=15&scale=1&markers=color:red|lable:S|25.55555,75.99999'
+        var imgUrl = 'https://maps.googleapis.com/maps/api/staticmap?center=25.55555,75.99999&size=250x150&zoom=15&scale=1&markers=color:red|lable:S|25.55555,75.99999&key=AIzaSyAYUd8MPnfYjLk_ypiWm8_jTBhUIhRxf6g'
 
         var location = generateLocationMessage(from, lat,long);
         expect(location.createdAt).toBeA('number');

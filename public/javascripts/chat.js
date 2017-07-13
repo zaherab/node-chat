@@ -59,9 +59,11 @@ $(function () {
     socket.on('newLocationMessage', function (message) {
         var formattedLocationTime = moment(message.createdAt).format('h:mm a');
         var template = $('#location-message-template').html();
+        console.log(message);
         var html = Mustache.render(template, {
             url: message.url,
             from: message.from,
+            imgUrl: message.imgUrl,
             createdAt: formattedLocationTime
         });
 
